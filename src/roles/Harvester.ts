@@ -5,7 +5,7 @@ export default class Harvester extends Role {
 	traits: BodyPartConstant[] = [ WORK, CARRY, MOVE ];
 	requestedCreeps: number = 1;
 	loop: Function = (creep: Creep) => {
-		Role.prototype.loop(creep);
+		new Role().loop(creep);
 
 		console.log('harvesterin')
 	}

@@ -47,7 +47,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
 		const creep = Game.creeps[name];
 
 		// Get the role for the creep
-		var role = roles.find((role) => { role.key == creep.memory.role })?.value;
+		var role = roles.find((role) => role.key == creep.memory.role)?.value;
 		if (!role) {
 			console.log(`Creep ${creep.name} does not have a role in list [ '${roles.map(r => r.key).join('\', \'')}' ]`)
 			continue;
@@ -66,7 +66,6 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
 		while (count < role.requestedCreeps) {
 			const newId = `${role.role}${count + 1}`;
-			console.log(newId)
 
 			let code = Game.spawns['Spawn1'].spawnCreep(role.traits, newId);
 			if (code < 0)
