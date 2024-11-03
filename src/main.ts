@@ -3,14 +3,6 @@ import { filter } from 'lodash';
 import Harvester from './roles/Harvester';
 
 declare global {
-	/*
-		Example types, expand on these or remove them and add your own.
-		Note: Values, properties defined here do no fully *exist* by this type definiton alone.
-			You must also give them an implemention if you would like to use them. (ex. actually setting a `role` property in a Creeps memory)
-
-		Types added in this `global` block are in an ambient, global context. This is needed because `main.ts` is a module file (uses import or export).
-		Interfaces matching on name from @types/screeps will be merged. This is how you can extend the 'built-in' interfaces from @types/screeps.
-	*/
 	// Memory extension samples
 	interface Memory {
 		uuid: number;
@@ -21,6 +13,7 @@ declare global {
 		role: string;
 		room: string;
 		working: boolean;
+		target?: Id<Source>;
 	}
 
 	// Syntax for adding proprties to `global` (ex "global.log")
@@ -33,9 +26,8 @@ declare global {
 
 
 const roles = [ { 'key': 'Harvester', 'value': new Harvester() } ]
+let count = 0;
 
-// When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
-// This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
 	console.log(`Current game tick is ${Game.time}`);
 
@@ -43,7 +35,9 @@ export const loop = ErrorMapper.wrapLoop(() => {
 		// Automatically delete memory of missing creeps
 		if (!(name in Game.creeps))
 			delete Memory.creeps[name];
+	}
 
+	for (const name in Game.creeps) {
 		const creep = Game.creeps[name];
 
 		// Get the role for the creep
@@ -62,7 +56,6 @@ export const loop = ErrorMapper.wrapLoop(() => {
 	for (const r in roles) {
 		// Get all creeps of this kind
 		const role = roles[r].value;
-		let count = filter(Game.creeps, { memory: { role: roles[r].key } }).length;
 
 		while (count < role.requestedCreeps) {
 			const newId = `${role.role}${count + 1}`;
@@ -70,8 +63,6 @@ export const loop = ErrorMapper.wrapLoop(() => {
 			let code = Game.spawns['Spawn1'].spawnCreep(role.traits, newId);
 			if (code < 0)
 				console.log(`Failed to spawn creep ${newId} for role ${role.role} at spawn ${'Spawn1'} with code ${code}`);
-			if (code == ERR_BUSY)
-				continue;
 
 			// Make sure the creep knows its' place
 			const newCreep = Game.creeps[newId];

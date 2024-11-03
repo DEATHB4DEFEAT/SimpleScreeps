@@ -3,6 +3,6 @@ export default class Role {
 	traits!: BodyPartConstant[];
 	requestedCreeps!: number;
 	loop: Function = (creep: Creep) => {
-		console.log(creep.memory);
+		// hi
 	}
 }
