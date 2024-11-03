@@ -1,6 +1,7 @@
 import { ErrorMapper } from "utils/ErrorMapper";
 import { filter } from 'lodash';
 import Harvester from './roles/Harvester';
+import Builder from './roles/Builder';
 
 declare global {
 	// Memory extension samples
@@ -14,6 +15,7 @@ declare global {
 		room: string;
 		working: boolean;
 		target?: Id<Source>;
+		task?: string;
 	}
 
 	// Syntax for adding proprties to `global` (ex "global.log")
@@ -25,7 +27,10 @@ declare global {
 }
 
 
-const roles = [ { 'key': 'Harvester', 'value': new Harvester() } ]
+const roles = [
+	{ 'key': 'Builder',   'value': new Builder()   },
+	{ 'key': 'Harvester', 'value': new Harvester() },
+];
 let count = 0;
 
 export const loop = ErrorMapper.wrapLoop(() => {
@@ -56,19 +61,22 @@ export const loop = ErrorMapper.wrapLoop(() => {
 	for (const r in roles) {
 		// Get all creeps of this kind
 		const role = roles[r].value;
+		let cur = filter(Game.creeps, { memory: { role: roles[r].key } }).length;
 
-		while (count < role.requestedCreeps) {
+		while (cur < role.requestedCreeps) {
 			const newId = `${role.role}${count + 1}`;
 
 			let code = Game.spawns['Spawn1'].spawnCreep(role.traits, newId);
-			if (code < 0)
+			count++;
+			if (code < 0) {
 				console.log(`Failed to spawn creep ${newId} for role ${role.role} at spawn ${'Spawn1'} with code ${code}`);
+				return;
+			}
 
 			// Make sure the creep knows its' place
 			const newCreep = Game.creeps[newId];
 			newCreep.memory.role = role.role;
-
-			count++;
+			cur++;
 		}
 	}
 });
