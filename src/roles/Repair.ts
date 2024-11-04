@@ -17,6 +17,8 @@ export default class Repair extends Role {
 				creep.memory.task = Tasks.REPAIR;
 			else
 				creep.memory.task = Tasks.SUPPLY_SPAWN;
+
+			creep.say(creep.memory.task);
 		}
 
 
@@ -58,7 +60,8 @@ export default class Repair extends Role {
 			creep.memory.target = source;
 			const sourceBlock = Game.getObjectById(source)!;
 
-			const code = creep.withdraw(sourceBlock, RESOURCE_ENERGY, creep.store.getFreeCapacity());
+			const code = creep.withdraw(sourceBlock, RESOURCE_ENERGY,
+				Math.min(creep.store.getFreeCapacity(), (sourceBlock as StructureStorage).store.getUsedCapacity(RESOURCE_ENERGY)));
 			if (code == ERR_NOT_IN_RANGE)
 				creep.moveTo(sourceBlock);
 			if (code == ERR_INVALID_TARGET)

@@ -11,12 +11,16 @@ export default class Harvester extends Role {
 
 
 		if (!creep.memory.task) {
-			if (creep.store.getFreeCapacity() > 0)
+			if (creep.store.getFreeCapacity() > 0) {
 				creep.memory.task = Tasks.HARVEST;
+			}
 			else {
 				if (creep.store[RESOURCE_ENERGY] > 0)
 					creep.memory.task = Tasks.DEPOSIT_ENERGY;
 			}
+
+			if (creep.memory.task)
+				creep.say(creep.memory.task);
 		}
 
 
@@ -37,8 +41,10 @@ export default class Harvester extends Role {
 			const code = creep.transfer(structure, RESOURCE_ENERGY);
 			if (code == ERR_NOT_IN_RANGE)
 				creep.moveTo(structure);
-			if (code == ERR_FULL)
+			if (code == ERR_FULL) {
 				creep.memory.task = Tasks.SUPPLY_SPAWN;
+				creep.say(creep.memory.task);
+			}
 			if (code == ERR_INVALID_TARGET)
 				delete creep.memory.target;
 		}

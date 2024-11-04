@@ -4,7 +4,7 @@ import Tasks from '../utils/Tasks';
 
 export default class Builder extends Role {
 	role: string = 'Builder';
-	traits: BodyPartConstant[] = [ WORK, CARRY, MOVE, MOVE ];
+	traits: BodyPartConstant[] = [ WORK, WORK, CARRY, MOVE ];
 	requestedCreeps: number = 2;
 	loop: Function = (creep: Creep) => {
 		new Role().loop(creep);
@@ -12,11 +12,14 @@ export default class Builder extends Role {
 
 		// Figure out what to do
 		const site = Object.values(Game.constructionSites)[0];
-		if (site && creep.store.getFreeCapacity() == 0)
-			creep.memory.task = Tasks.BUILD;
+		if (creep.store.getFreeCapacity() == 0) {
+			if (site)
+				creep.memory.task = Tasks.BUILD;
+			creep.memory.task ??= Tasks.UPGRADE_ROOM;
 
-		if (!creep.memory.task && creep.store.getFreeCapacity() == 0)
-			creep.memory.task = Tasks.UPGRADE_ROOM;
+			creep.say(creep.memory.task);
+		}
+
 
 
 		// Highest priority
@@ -54,7 +57,8 @@ export default class Builder extends Role {
 			}
 			const sourceBlock = Game.getObjectById(source)!;
 
-			const code = creep.withdraw(sourceBlock, RESOURCE_ENERGY, creep.store.getFreeCapacity());
+			const code = creep.withdraw(sourceBlock, RESOURCE_ENERGY,
+				Math.min(creep.store.getFreeCapacity(), (sourceBlock as StructureStorage).store.getUsedCapacity(RESOURCE_ENERGY)));
 			if (code == ERR_NOT_ENOUGH_RESOURCES)
 				creep.memory.task = Tasks.BUILD;
 			if (code == ERR_INVALID_TARGET)
