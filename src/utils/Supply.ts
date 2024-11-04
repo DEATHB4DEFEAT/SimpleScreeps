@@ -1,4 +1,4 @@
-export function resupplyFromStorage(creep: Creep, resource: ResourceConstant) {
+export function resupplyFromContainer(creep: Creep, resource: ResourceConstant) {
 	const source = creep.memory.target ?? creep.room.find(FIND_STRUCTURES)
 		.find(s => s.structureType == STRUCTURE_CONTAINER && s.store[resource] > 0)?.id;
 	if (!source) {

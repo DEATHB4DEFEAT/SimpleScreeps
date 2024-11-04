@@ -1,5 +1,5 @@
 import Role from '../utils/Role';
-import { resupplyFromStorage } from '../utils/Supply';
+import { resupplyFromContainer } from '../utils/Supply';
 import Tasks from '../utils/Tasks';
 
 
@@ -50,7 +50,7 @@ export default class Builder extends Role {
 
 		// Nothing yet, get energy from storage
 		else if (!creep.memory.task && creep.store.getFreeCapacity() > 0)
-			resupplyFromStorage(creep, RESOURCE_ENERGY);
+			resupplyFromContainer(creep, RESOURCE_ENERGY);
 
 		// Invalid
 		else if (!creep.memory.task)
