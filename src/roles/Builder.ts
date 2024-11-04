@@ -24,10 +24,10 @@ export default class Builder extends Role {
 			delete creep.memory.target;
 
 			const code = creep.build(site);
-			if (code == ERR_NOT_IN_RANGE)
-				creep.moveTo(site);
 			if (code == ERR_INVALID_TARGET)
 				delete creep.memory.task;
+			if (code == ERR_NOT_IN_RANGE)
+				creep.moveTo(site);
 
 			if (creep.store[RESOURCE_ENERGY] == 0)
 				delete creep.memory.task;
@@ -44,17 +44,23 @@ export default class Builder extends Role {
 				delete creep.memory.task;
 		}
 
-		// Nothing yet, harvest
+		// Nothing yet, get energy from storage
 		else if (!creep.memory.task && creep.store.getFreeCapacity() > 0) {
-			const source = creep.memory.target ?? creep.room.find(FIND_SOURCES)[0].id;
-			creep.memory.target = source;
+			const source = creep.memory.target ?? creep.room.find(FIND_STRUCTURES)
+				.find(s => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 0)?.id;
+			if (!source) {
+				creep.say('NO ENERGY');
+				return;
+			}
 			const sourceBlock = Game.getObjectById(source)!;
 
-			const code = creep.harvest(sourceBlock);
-			if (code == ERR_NOT_IN_RANGE)
-				creep.moveTo(sourceBlock);
+			const code = creep.withdraw(sourceBlock, RESOURCE_ENERGY, creep.store.getFreeCapacity());
+			if (code == ERR_NOT_ENOUGH_RESOURCES)
+				creep.memory.task = Tasks.BUILD;
 			if (code == ERR_INVALID_TARGET)
 				delete creep.memory.target;
+			if (code == ERR_NOT_IN_RANGE)
+				creep.moveTo(sourceBlock);
 		}
 
 		// Invalid
