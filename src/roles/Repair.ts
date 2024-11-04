@@ -1,4 +1,5 @@
 import Role from '../utils/Role';
+import { resupplyFromStorage } from '../utils/Supply';
 import Tasks from '../utils/Tasks';
 
 
@@ -41,7 +42,7 @@ export default class Repair extends Role {
 		else if (creep.memory.task == Tasks.SUPPLY_SPAWN) {
 			delete creep.memory.target;
 
-			if (creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY, 50) == ERR_NOT_IN_RANGE)
+			if (creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY, creep.store[RESOURCE_ENERGY]) == ERR_NOT_IN_RANGE)
 				creep.moveTo(Game.spawns['Spawn1']);
 
 			if (creep.store[RESOURCE_ENERGY] == 0)
@@ -49,24 +50,8 @@ export default class Repair extends Role {
 		}
 
 		// Nothing to do, get energy from storage
-		else if (!creep.memory.task && creep.store.getFreeCapacity() > 0) {
-			const source = creep.memory.target ?? creep.room.find(FIND_STRUCTURES)
-				.find(s => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 0)?.id;
-			if (!source) {
-				creep.say('NO ENERGY');
-				return;
-			}
-
-			creep.memory.target = source;
-			const sourceBlock = Game.getObjectById(source)!;
-
-			const code = creep.withdraw(sourceBlock, RESOURCE_ENERGY,
-				Math.min(creep.store.getFreeCapacity(), (sourceBlock as StructureStorage).store.getUsedCapacity(RESOURCE_ENERGY)));
-			if (code == ERR_NOT_IN_RANGE)
-				creep.moveTo(sourceBlock);
-			if (code == ERR_INVALID_TARGET)
-				delete creep.memory.target;
-		}
+		else if (!creep.memory.task && creep.store.getFreeCapacity() > 0)
+			resupplyFromStorage(creep, RESOURCE_ENERGY);
 
 		// Invalid
 		else if (!creep.memory.task)

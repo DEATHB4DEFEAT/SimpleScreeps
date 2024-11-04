@@ -1,4 +1,5 @@
 import Role from '../utils/Role';
+import { resupplyFromStorage } from '../utils/Supply';
 import Tasks from '../utils/Tasks';
 
 
@@ -48,24 +49,8 @@ export default class Builder extends Role {
 		}
 
 		// Nothing yet, get energy from storage
-		else if (!creep.memory.task && creep.store.getFreeCapacity() > 0) {
-			const source = creep.memory.target ?? creep.room.find(FIND_STRUCTURES)
-				.find(s => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 0)?.id;
-			if (!source) {
-				creep.say('NO ENERGY');
-				return;
-			}
-			const sourceBlock = Game.getObjectById(source)!;
-
-			const code = creep.withdraw(sourceBlock, RESOURCE_ENERGY,
-				Math.min(creep.store.getFreeCapacity(), (sourceBlock as StructureStorage).store.getUsedCapacity(RESOURCE_ENERGY)));
-			if (code == ERR_NOT_ENOUGH_RESOURCES)
-				creep.memory.task = Tasks.BUILD;
-			if (code == ERR_INVALID_TARGET)
-				delete creep.memory.target;
-			if (code == ERR_NOT_IN_RANGE)
-				creep.moveTo(sourceBlock);
-		}
+		else if (!creep.memory.task && creep.store.getFreeCapacity() > 0)
+			resupplyFromStorage(creep, RESOURCE_ENERGY);
 
 		// Invalid
 		else if (!creep.memory.task)
