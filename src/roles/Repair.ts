@@ -42,7 +42,8 @@ export default class Repair extends Role {
 		else if (creep.memory.task == Tasks.SUPPLY_SPAWN) {
 			delete creep.memory.target;
 
-			if (creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY, creep.store[RESOURCE_ENERGY]) == ERR_NOT_IN_RANGE)
+			if (creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY,
+				Math.min(creep.store[RESOURCE_ENERGY], Game.spawns['Spawn1'].store.getFreeCapacity(RESOURCE_ENERGY))) == ERR_NOT_IN_RANGE)
 				creep.moveTo(Game.spawns['Spawn1']);
 
 			if (creep.store[RESOURCE_ENERGY] == 0)

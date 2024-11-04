@@ -34,6 +34,11 @@ export default class EnergyDistributor extends Role {
 		}
 
 		else if (creep.memory.task == Tasks.SUPPLY_SPAWN_EXTENSIONS) {
+			if (!ext) {
+				delete creep.memory.task;
+				return;
+			}
+
 			const code = creep.transfer(ext!, RESOURCE_ENERGY,
 				Math.min(creep.store[RESOURCE_ENERGY], (ext as StructureExtension).store.getFreeCapacity(RESOURCE_ENERGY)));
 			if (code == ERR_INVALID_TARGET) {
