@@ -30,7 +30,8 @@ export default class EnergyHarvester extends Role {
 
 			let structure = creep.memory.target ? Game.getObjectById(creep.memory.target) as StructureContainer : undefined;
 			if (!structure) {
-				structure = creep.room.find(FIND_STRUCTURES).find(s => s.structureType == STRUCTURE_CONTAINER) as StructureContainer;
+				structure = creep.room.find(FIND_STRUCTURES)
+					.find(s => s.structureType == STRUCTURE_CONTAINER && s.store.getFreeCapacity() > 0) as StructureContainer;
 				if (!structure) {
 					creep.memory.task = Tasks.SUPPLY_SPAWN;
 					return;
