@@ -1,10 +1,10 @@
-import Role from '../utils/Role';
-import Tasks from '../utils/Tasks';
+import Role from '../../utils/Role';
+import Tasks from '../../utils/Tasks';
 
 
-export default class Harvester extends Role {
-	role: string = 'Harvester';
-	traits: BodyPartConstant[] = [ WORK, CARRY, MOVE, MOVE ];
+export default class EnergyHarvester extends Role {
+	role: string = 'EnergyHarvester';
+	traits: BodyPartConstant[] = [WORK, CARRY, MOVE, MOVE];
 	requestedCreeps: number = 8;
 	loop: Function = (creep: Creep) => {
 		new Role().loop(creep);
