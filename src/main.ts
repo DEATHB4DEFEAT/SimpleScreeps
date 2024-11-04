@@ -2,6 +2,8 @@ import { ErrorMapper } from "utils/ErrorMapper";
 import { filter } from 'lodash';
 import Harvester from './roles/Harvester';
 import Builder from './roles/Builder';
+import Distributor from './roles/Distributor';
+import Repair from './roles/Repair';
 
 
 
@@ -23,8 +25,10 @@ declare global {
 
 //TODO: Make this dynamic
 const roles = [
-	{ 'key': 'Builder',   'value': new Builder()   },
-	{ 'key': 'Harvester', 'value': new Harvester() },
+	{ 'key': 'Builder',		'value': new Builder()		},
+	// { 'key': 'Distributor',	'value': new Distributor()	},
+	{ 'key': 'Harvester',	'value': new Harvester()	},
+	{ 'key': 'Repair',      'value': new Repair()       },
 ];
 
 let count = 0;
