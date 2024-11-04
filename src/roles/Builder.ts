@@ -5,7 +5,7 @@ import Tasks from '../utils/Tasks';
 export default class Builder extends Role {
 	role: string = 'Builder';
 	traits: BodyPartConstant[] = [ WORK, CARRY, MOVE, MOVE ];
-	requestedCreeps: number = 4;
+	requestedCreeps: number = 2;
 	loop: Function = (creep: Creep) => {
 		new Role().loop(creep);
 

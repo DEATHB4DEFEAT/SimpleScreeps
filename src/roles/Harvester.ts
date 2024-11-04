@@ -38,7 +38,7 @@ export default class Harvester extends Role {
 			if (code == ERR_NOT_IN_RANGE)
 				creep.moveTo(structure);
 			if (code == ERR_FULL)
-				creep.memory.task == Tasks.SUPPLY_SPAWN;
+				creep.memory.task = Tasks.SUPPLY_SPAWN;
 			if (code == ERR_INVALID_TARGET)
 				delete creep.memory.target;
 		}
@@ -46,8 +46,11 @@ export default class Harvester extends Role {
 		else if (creep.memory.task == Tasks.SUPPLY_SPAWN && creep.store[RESOURCE_ENERGY] > 0) {
 			delete creep.memory.target;
 
-			if (creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
+			const code = creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY);
+			if (code == ERR_NOT_IN_RANGE)
 				creep.moveTo(Game.spawns['Spawn1']);
+			if (code == ERR_FULL)
+				delete creep.memory.task;
 		}
 
 		else if (creep.memory.task == Tasks.HARVEST && creep.store.getFreeCapacity() > 0) {
