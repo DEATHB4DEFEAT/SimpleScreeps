@@ -5,7 +5,7 @@ import Tasks from '../../utils/Tasks';
 export default class EnergyHarvester extends Role {
 	role: string = 'EnergyHarvester';
 	traits: BodyPartConstant[] = [WORK, CARRY, MOVE, MOVE];
-	requestedCreeps: number = 8;
+	requestedCreeps: number = 16;
 	loop: Function = (creep: Creep) => {
 		new Role().loop(creep);
 

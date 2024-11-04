@@ -1,17 +1,17 @@
 import Role from '../../utils/Role';
-import Tasks from '../../utils/Tasks';
 
 
 export default class Melee extends Role {
 	role: string = 'Melee';
 	traits: BodyPartConstant[] = [ ATTACK, ATTACK, ATTACK, ATTACK, MOVE ];
-	requestedCreeps: number = 1;
+	requestedCreeps: number = 0;
 	loop: Function = (creep: Creep) => {
 		new Role().loop(creep);
 
 
 		if (creep.room.name != 'W3N7')
 			creep.moveTo(creep.room.find(FIND_EXIT_BOTTOM)[0], { visualizePathStyle: { fill: 'black' } });
+			// creep.moveByPath(creep.room.findPath(creep.pos, Game.rooms['W3N7'].getPositionAt(10, 10)!));
 		else
 		{
 			const enemy = creep.room.find(FIND_HOSTILE_STRUCTURES).find(s => s.structureType == STRUCTURE_INVADER_CORE);
