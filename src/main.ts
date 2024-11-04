@@ -4,6 +4,7 @@ import EnergyHarvester from './roles/Harvesters/EnergyHarvester';
 import Builder from './roles/Builder';
 import EnergyDistributor from './roles/Distributors/EnergyDistributor';
 import Repair from './roles/Repair';
+import Melee from './roles/Combat/Melee';
 
 
 
@@ -28,6 +29,7 @@ const roles = [
 	{ 'key': 'Builder', 'value': new Builder() },
 	{ 'key': 'EnergyDistributor', 'value': new EnergyDistributor() },
 	{ 'key': 'EnergyHarvester', 'value': new EnergyHarvester() },
+	{ 'key': 'Melee', 'value': new Melee() },
 	{ 'key': 'Repair', 'value': new Repair() },
 ];
 
