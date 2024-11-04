@@ -14,9 +14,10 @@ export default class EnergyDistributor extends Role {
 		// Figure out what to do
 		let ext = undefined;
 		if (creep.store.getFreeCapacity() == 0) {
-			if (Game.spawns['Spawn1'].store.getFreeCapacity()! > 0)
+			if (Game.spawns['Spawn1'].energy < Game.spawns['Spawn1'].energyCapacity)
 				creep.memory.task = Tasks.SUPPLY_SPAWN;
-			else if ((ext = Game.spawns['Spawn1'].room.find(FIND_MY_STRUCTURES).find(s => s.structureType == STRUCTURE_EXTENSION)))
+			else if ((ext = Game.spawns['Spawn1'].room.find(FIND_MY_STRUCTURES)
+					.find(s => s.structureType == STRUCTURE_EXTENSION && s.store.getFreeCapacity(RESOURCE_ENERGY) > 0)))
 				creep.memory.task = Tasks.SUPPLY_SPAWN_EXTENSIONS;
 
 			if (creep.memory.task)
