@@ -16,7 +16,7 @@ export default class Repair extends Role {
 			if (dest)
 				creep.memory.task = Tasks.REPAIR;
 			else
-				creep.memory.task = Tasks.UPGRADE_ROOM;
+				creep.memory.task = Tasks.SUPPLY_SPAWN;
 		}
 
 
@@ -36,11 +36,11 @@ export default class Repair extends Role {
 		}
 
 		// Nothing to build, use it on the spawn
-		else if (creep.memory.task == Tasks.UPGRADE_ROOM) {
+		else if (creep.memory.task == Tasks.SUPPLY_SPAWN) {
 			delete creep.memory.target;
 
-			if (creep.upgradeController(creep.room.controller!) == ERR_NOT_IN_RANGE)
-				creep.moveTo(creep.room.controller!);
+			if (creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY, 50) == ERR_NOT_IN_RANGE)
+				creep.moveTo(Game.spawns['Spawn1']);
 
 			if (creep.store[RESOURCE_ENERGY] == 0)
 				delete creep.memory.task;
