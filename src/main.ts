@@ -3,8 +3,9 @@ import { filter } from 'lodash';
 import Harvester from './roles/Harvester';
 import Builder from './roles/Builder';
 
+
+
 declare global {
-	// Memory extension samples
 	interface Memory {
 		uuid: number;
 		log: any;
@@ -14,24 +15,20 @@ declare global {
 		role: string;
 		room: string;
 		working: boolean;
-		target?: Id<Source>;
+		target?: Id<any>;
 		task?: string;
-	}
-
-	// Syntax for adding proprties to `global` (ex "global.log")
-	namespace NodeJS {
-		interface Global {
-			log: any;
-		}
 	}
 }
 
 
+//TODO: Make this dynamic
 const roles = [
 	{ 'key': 'Builder',   'value': new Builder()   },
 	{ 'key': 'Harvester', 'value': new Harvester() },
 ];
+
 let count = 0;
+
 
 export const loop = ErrorMapper.wrapLoop(() => {
 	console.log(`Current game tick is ${Game.time}`);
@@ -48,7 +45,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
 		// Get the role for the creep
 		var role = roles.find((role) => role.key == creep.memory.role)?.value;
 		if (!role) {
-			console.log(`Creep ${creep.name} does not have a role in list [ '${roles.map(r => r.key).join('\', \'')}' ]`)
+			console.log(`Creep ${creep.name} does not have a role in list [ '${roles.map(r => r.key).join('\', \'')}' ]`);
 			continue;
 		}
 
