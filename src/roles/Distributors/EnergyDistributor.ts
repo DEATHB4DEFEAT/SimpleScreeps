@@ -6,7 +6,7 @@ import Tasks from '../../utils/Tasks';
 export default class EnergyDistributor extends Role {
 	role: string = 'EnergyDistributor';
 	traits: BodyPartConstant[] = [CARRY, CARRY, CARRY, CARRY, MOVE];
-	requestedCreeps: number = 0;
+	requestedCreeps: number = 1;
 	loop: Function = (creep: Creep) => {
 		new Role().loop(creep);
 

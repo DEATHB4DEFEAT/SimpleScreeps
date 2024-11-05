@@ -7,8 +7,11 @@ export function resupplyFromContainer(creep: Creep, resource: ResourceConstant):
 	}
 
 	const sourceBlock = Game.getObjectById(source) as StructureContainer;
-	if ((sourceBlock as Structure).structureType != STRUCTURE_CONTAINER)
+	if ((sourceBlock as Structure).structureType != STRUCTURE_CONTAINER
+		|| sourceBlock.store[RESOURCE_ENERGY] == 0) {
+		delete creep.memory.targets.container;
 		return false;
+	}
 	creep.memory.targets.container = source;
 
 	const code = creep.withdraw(sourceBlock, resource,

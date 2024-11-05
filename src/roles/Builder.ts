@@ -6,7 +6,7 @@ import Tasks from '../utils/Tasks';
 export default class Builder extends Role {
 	role: string = 'Builder';
 	traits: BodyPartConstant[] = [ WORK, WORK, CARRY, MOVE ];
-	requestedCreeps: number = 5;
+	requestedCreeps: number = 3;
 	loop: Function = (creep: Creep) => {
 		new Role().loop(creep);
 
@@ -40,10 +40,13 @@ export default class Builder extends Role {
 			const code = creep.build(site);
 			if (code == ERR_NOT_IN_RANGE)
 				creep.moveTo(site);
-			if (code == ERR_INVALID_TARGET || creep.store[RESOURCE_ENERGY] == 0) {
+			if (code == ERR_INVALID_TARGET) {
 				delete creep.memory.targets.build;
 				delete creep.memory.task;
 			}
+
+			if (creep.store[RESOURCE_ENERGY] == 0)
+				delete creep.memory.task;
 		}
 
 		// Nothing to build, use it on the spawn

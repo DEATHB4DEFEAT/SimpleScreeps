@@ -14,14 +14,24 @@ export default class EnergyHarvester extends Role {
 			if (creep.store.getFreeCapacity() > 0)
 				creep.memory.task = Tasks.HARVEST;
 			else if (creep.store[RESOURCE_ENERGY] > 0)
-					creep.memory.task = Tasks.DEPOSIT_ENERGY;
+					creep.memory.task = Tasks.SUPPLY_SPAWN;
 
 			if (creep.memory.task)
 				creep.say(creep.memory.task);
 		}
 
 
-		if (creep.memory.task == Tasks.DEPOSIT_ENERGY && creep.store[RESOURCE_ENERGY] > 0) {
+		if (creep.memory.task == Tasks.SUPPLY_SPAWN && creep.store[RESOURCE_ENERGY] > 0) {
+			delete creep.memory.targets.source;
+
+			const code = creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY);
+			if (code == ERR_NOT_IN_RANGE)
+				creep.moveTo(Game.spawns['Spawn1']);
+			if (code == ERR_FULL)
+				creep.memory.task = Tasks.DEPOSIT_ENERGY;
+		}
+
+		else if (creep.memory.task == Tasks.DEPOSIT_ENERGY && creep.store[RESOURCE_ENERGY] > 0) {
 			if (!creep.memory.targets?.container || !Game.getObjectById(creep.memory.targets.container))
 				delete creep.memory.targets?.container;
 			delete creep.memory.targets.source;
@@ -46,16 +56,6 @@ export default class EnergyHarvester extends Role {
 			}
 			if (code == ERR_INVALID_TARGET)
 				delete creep.memory.targets.container;
-		}
-
-		else if (creep.memory.task == Tasks.SUPPLY_SPAWN && creep.store[RESOURCE_ENERGY] > 0) {
-			delete creep.memory.targets.source;
-
-			const code = creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY);
-			if (code == ERR_NOT_IN_RANGE)
-				creep.moveTo(Game.spawns['Spawn1']);
-			if (code == ERR_FULL)
-				delete creep.memory.task;
 		}
 
 		else if (creep.memory.task == Tasks.HARVEST && creep.store.getFreeCapacity() > 0) {

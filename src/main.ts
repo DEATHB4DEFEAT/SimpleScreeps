@@ -31,11 +31,11 @@ declare global {
 
 //TODO: Make this dynamic
 const roles = [
-	{ 'key': 'Builder', 'value': new Builder() },
-	{ 'key': 'EnergyDistributor', 'value': new EnergyDistributor() },
 	{ 'key': 'EnergyHarvester', 'value': new EnergyHarvester() },
-	{ 'key': 'Melee', 'value': new Melee() },
+	{ 'key': 'Builder', 'value': new Builder() },
 	{ 'key': 'Repair', 'value': new Repair() },
+	{ 'key': 'EnergyDistributor', 'value': new EnergyDistributor() },
+	{ 'key': 'Melee', 'value': new Melee() },
 ];
 
 let count = 0;
