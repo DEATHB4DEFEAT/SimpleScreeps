@@ -1,5 +1,5 @@
 import { ErrorMapper } from "utils/ErrorMapper";
-import { filter } from 'lodash';
+import { filter, object } from 'lodash';
 import EnergyHarvester from './roles/Harvesters/EnergyHarvester';
 import Builder from './roles/Builder';
 import EnergyDistributor from './roles/Distributors/EnergyDistributor';
@@ -17,8 +17,13 @@ declare global {
 	interface CreepMemory {
 		role: string;
 		room: string;
-		working: boolean;
-		target?: Id<any>;
+		targets: {
+			build?: Id<ConstructionSite>;
+			container?: Id<StructureContainer>;
+			repair?: Id<Structure>;
+			source?: Id<Source>;
+			spawn?: Id<StructureSpawn>;
+		}
 		task?: string;
 	}
 }
@@ -39,11 +44,10 @@ let count = 0;
 export const loop = ErrorMapper.wrapLoop(() => {
 	console.log(`Current game tick is ${Game.time}`);
 
-	for (const name in Memory.creeps) {
-		// Automatically delete memory of missing creeps
+	// Automatically delete memory of missing creeps
+	for (const name in Memory.creeps)
 		if (!(name in Game.creeps))
 			delete Memory.creeps[name];
-	}
 
 	for (const name in Game.creeps) {
 		const creep = Game.creeps[name];
@@ -79,6 +83,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
 			// Make sure the creep knows its' place
 			const newCreep = Game.creeps[newId];
 			newCreep.memory.role = role.role;
+			newCreep.memory.targets = {};
 			cur++;
 		}
 	}

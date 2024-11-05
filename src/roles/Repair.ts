@@ -12,20 +12,25 @@ export default class Repair extends Role {
 
 
 		// Figure out what to do
-		const dest = creep.room.find(FIND_STRUCTURES).sort(s => s.hits / s.hitsMax).find(s => s.hits < s.hitsMax);
+		let obj;
+		if (creep.memory.targets.repair)
+			obj = Game.getObjectById(creep.memory.targets.repair);
+
+		const dest = obj ?? creep.room.find(FIND_STRUCTURES).sort(s => s.hits / s.hitsMax).find(s => s.hits < s.hitsMax);
 		if (creep.store.getFreeCapacity() == 0) {
+			let ol = creep.memory.task;
 			if (dest)
 				creep.memory.task = Tasks.REPAIR;
 			else
 				creep.memory.task = Tasks.SUPPLY_SPAWN;
 
-			creep.say(creep.memory.task);
+			if (ol != creep.memory.task)
+				creep.say(creep.memory.task);
 		}
 
 
 		// Highest priority
 		if (creep.memory.task == Tasks.REPAIR) {
-			delete creep.memory.target;
 			if (!dest) {
 				delete creep.memory.task;
 				return;
@@ -34,13 +39,15 @@ export default class Repair extends Role {
 			const code = creep.repair(dest);
 			if (code == ERR_NOT_IN_RANGE)
 				creep.moveTo(dest);
-			if (code == ERR_INVALID_TARGET || creep.store[RESOURCE_ENERGY] == 0)
+			if (code == ERR_INVALID_TARGET || creep.store[RESOURCE_ENERGY] == 0) {
+				delete creep.memory.targets.repair;
 				delete creep.memory.task;
+			}
 		}
 
 		// Nothing to build, use it on the spawn
 		else if (creep.memory.task == Tasks.SUPPLY_SPAWN) {
-			delete creep.memory.target;
+			delete creep.memory.targets.repair;
 
 			if (creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY,
 				Math.min(creep.store[RESOURCE_ENERGY], Game.spawns['Spawn1'].store.getFreeCapacity(RESOURCE_ENERGY))) == ERR_NOT_IN_RANGE)
