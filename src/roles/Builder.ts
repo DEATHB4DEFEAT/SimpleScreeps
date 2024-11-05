@@ -14,11 +14,13 @@ export default class Builder extends Role {
 		// Figure out what to do
 		const site = Object.values(Game.constructionSites)[0];
 		if (creep.store.getFreeCapacity() == 0) {
+			const ol = creep.memory.task;
 			if (site)
 				creep.memory.task = Tasks.BUILD;
 			creep.memory.task ??= Tasks.UPGRADE_ROOM;
 
-			creep.say(creep.memory.task);
+			if (ol != creep.memory.task)
+				creep.say(creep.memory.task);
 		}
 
 
@@ -50,7 +52,18 @@ export default class Builder extends Role {
 
 		// Nothing yet, get energy from storage
 		else if (!creep.memory.task && creep.store.getFreeCapacity() > 0)
-			resupplyFromContainer(creep, RESOURCE_ENERGY);
+			if (!resupplyFromContainer(creep, RESOURCE_ENERGY)) {
+				// Harvest since nobody is supplying us
+				const source = creep.memory.target ?? creep.room.find(FIND_SOURCES)[0].id;
+				creep.memory.target = source;
+				const sourceBlock = Game.getObjectById(source);
+
+				const code = creep.harvest(sourceBlock)
+				if (code == ERR_NOT_IN_RANGE)
+					creep.moveTo(sourceBlock);
+				if (code == ERR_INVALID_TARGET)
+					delete creep.memory.target;
+			}
 
 		// Invalid
 		else if (!creep.memory.task)

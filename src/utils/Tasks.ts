@@ -1,5 +1,5 @@
 // Alphabetically ordered
-const tasks = {
+const Tasks = {
 	BUILD: 'BUILD',
 	DEPOSIT_ENERGY: 'DEPOSIT_ENERGY',
 	HARVEST: 'HARVEST',
@@ -9,4 +9,4 @@ const tasks = {
 	UPGRADE_ROOM: 'UPGRADE_ROOM',
 }
 
-export default tasks;
+export default Tasks;
