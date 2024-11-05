@@ -39,10 +39,13 @@ export default class Repair extends Role {
 			const code = creep.repair(dest);
 			if (code == ERR_NOT_IN_RANGE)
 				creep.moveTo(dest);
-			if (code == ERR_INVALID_TARGET || creep.store[RESOURCE_ENERGY] == 0) {
+			if (code == ERR_INVALID_TARGET) {
 				delete creep.memory.targets.repair;
 				delete creep.memory.task;
 			}
+
+			if (creep.store[RESOURCE_ENERGY] == 0)
+				delete creep.memory.task;
 		}
 
 		// Nothing to build, use it on the spawn

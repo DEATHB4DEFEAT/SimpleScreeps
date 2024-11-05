@@ -23,6 +23,7 @@ declare global {
 			repair?: Id<Structure>;
 			source?: Id<Source>;
 			spawn?: Id<StructureSpawn>;
+			spawnExtension?: Id<StructureExtension>;
 		}
 		task?: string;
 	}
@@ -31,10 +32,10 @@ declare global {
 
 //TODO: Make this dynamic
 const roles = [
+	{ 'key': 'EnergyDistributor', 'value': new EnergyDistributor() },
 	{ 'key': 'EnergyHarvester', 'value': new EnergyHarvester() },
 	{ 'key': 'Builder', 'value': new Builder() },
 	{ 'key': 'Repair', 'value': new Repair() },
-	{ 'key': 'EnergyDistributor', 'value': new EnergyDistributor() },
 	{ 'key': 'Melee', 'value': new Melee() },
 ];
 

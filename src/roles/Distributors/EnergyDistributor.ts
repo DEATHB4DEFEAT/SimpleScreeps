@@ -5,19 +5,19 @@ import Tasks from '../../utils/Tasks';
 
 export default class EnergyDistributor extends Role {
 	role: string = 'EnergyDistributor';
-	traits: BodyPartConstant[] = [CARRY, CARRY, CARRY, CARRY, MOVE];
+	traits: BodyPartConstant[] = [ CARRY, CARRY, CARRY, MOVE, MOVE, MOVE ];
 	requestedCreeps: number = 1;
 	loop: Function = (creep: Creep) => {
 		new Role().loop(creep);
 
 
 		// Figure out what to do
-		let ext = undefined;
-		if (creep.store.getFreeCapacity() == 0) {
+		let ext = creep.memory.targets.spawnExtension ? Game.getObjectById(creep.memory.targets.spawnExtension) as StructureExtension : undefined;
+		if (!creep.memory.task && creep.store.getUsedCapacity() > 0) {
 			if (Game.spawns['Spawn1'].energy < Game.spawns['Spawn1'].energyCapacity)
 				creep.memory.task = Tasks.SUPPLY_SPAWN;
-			else if ((ext = Game.spawns['Spawn1'].room.find(FIND_MY_STRUCTURES)
-					.find(s => s.structureType == STRUCTURE_EXTENSION && s.store.getFreeCapacity(RESOURCE_ENERGY) > 0)))
+			else if ((ext ??= Game.spawns['Spawn1'].room.find(FIND_MY_STRUCTURES)
+					.find(s => s.structureType == STRUCTURE_EXTENSION && s.store.getFreeCapacity(RESOURCE_ENERGY) > 0) as StructureExtension))
 				creep.memory.task = Tasks.SUPPLY_SPAWN_EXTENSIONS;
 
 			if (creep.memory.task)
@@ -29,7 +29,7 @@ export default class EnergyDistributor extends Role {
 			const code = creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY,
 				Math.min(creep.store[RESOURCE_ENERGY], Game.spawns['Spawn1'].store.getFreeCapacity(RESOURCE_ENERGY)));
 			if (code == ERR_NOT_IN_RANGE)
-				creep.moveTo(Game.spawns['Spawn1']);
+				creep.moveTo(Game.spawns['Spawn1'], { visualizePathStyle: { stroke: 'yellow' } });
 			if (code == ERR_FULL || creep.store[RESOURCE_ENERGY] == 0)
 				delete creep.memory.task;
 		}
@@ -39,17 +39,17 @@ export default class EnergyDistributor extends Role {
 				delete creep.memory.task;
 				return;
 			}
+			else
+				creep.memory.targets.spawnExtension = ext.id;
 
-			const code = creep.transfer(ext!, RESOURCE_ENERGY,
+			const code = creep.transfer(ext, RESOURCE_ENERGY,
 				Math.min(creep.store[RESOURCE_ENERGY], (ext as StructureExtension).store.getFreeCapacity(RESOURCE_ENERGY)));
-			if (code == ERR_INVALID_TARGET) {
+			if (code == ERR_INVALID_TARGET || code == ERR_FULL || creep.store[RESOURCE_ENERGY] == 0) {
+				delete creep.memory.targets.spawnExtension;
 				delete creep.memory.task;
-				return;
 			}
 			if (code == ERR_NOT_IN_RANGE)
-				creep.moveTo(ext!);
-			if (code == ERR_FULL || creep.store[RESOURCE_ENERGY] == 0)
-				delete creep.memory.task;
+				creep.moveTo(ext, { visualizePathStyle: { stroke: 'yellow' } });
 		}
 
 		// Nothing to do, get energy from storage
