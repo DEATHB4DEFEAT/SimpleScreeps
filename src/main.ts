@@ -20,6 +20,7 @@ declare global {
 		targets: {
 			build?: Id<ConstructionSite>;
 			container?: Id<StructureContainer>;
+			creep?: Id<Creep>;
 			repair?: Id<Structure>;
 			source?: Id<Source>;
 			spawn?: Id<StructureSpawn>;

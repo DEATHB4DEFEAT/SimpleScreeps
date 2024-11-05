@@ -14,10 +14,10 @@ export default class Melee extends Role {
 		else
 		{
 			// const enemy = creep.room.find(FIND_HOSTILE_STRUCTURES).find(s => s.structureType == STRUCTURE_INVADER_CORE);
-			const enemy = creep.room.find(FIND_HOSTILE_CREEPS)[0];
+			const enemy = creep.memory.targets.creep ? Game.getObjectById(creep.memory.targets.creep) : creep.room.find(FIND_HOSTILE_CREEPS)[0];
 			if (!enemy) {
-				if (Game.flags['AWAITERM'])
-					creep.moveTo(Game.flags['AWAITERM'], { visualizePathStyle: { lineStyle: 'dotted', stroke: 'orange', }, })
+				if (Game.flags['AWAITERMINATE'])
+					creep.moveTo(Game.flags['AWAITERMINATE'], { visualizePathStyle: { lineStyle: 'dotted', stroke: 'orange', }, })
 				else
 					creep.say('TERMINATED')
 				return;
@@ -26,6 +26,8 @@ export default class Melee extends Role {
 			const code = creep.attack(enemy);
 			if (code == ERR_NOT_IN_RANGE)
 				creep.moveTo(enemy, { visualizePathStyle: { lineStyle: 'solid', stroke: 'red', }, });
+			if (code == ERR_INVALID_TARGET)
+				delete creep.memory.targets.creep;
 
 			// const controller = creep.room.controller!;
 			// const code = creep.attackController(controller);
