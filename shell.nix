@@ -1,7 +1,7 @@
 { pkgs ? import <nixpkgs> {} }:
 
 let
-  	NPM_CONFIG_PREFIX = toString ./npm_config_prefix;
+  	NPM_CONFIG_PREFIX = "./.npm";
 in pkgs.mkShell {
 	packages = with pkgs; [
 		nodejs

@@ -11,7 +11,7 @@
 		"push-master": "rollup -c --environment DEST:master",
 		"watch-master": "rollup -cw --environment DEST:master",
 
-		"steamless": "echo \"http://private.localhost:8080/(http://screeps.simplestation.org:25310)\"; npx screepers-steamless-client --port 8080",
+		"steamless": "echo \"http://private.localhost:8080/(http://screeps.simplestation.org:25310)/\"; npx screeps-steamless-client --package /drives/LES/Steam/steamapps/common/Screeps/package.nw",
 
 		"test": "npm run test-unit",
 		"test-unit": "mocha test/unit/**/*.ts",
