@@ -3,7 +3,7 @@ import Role from '../../utils/Role';
 
 export default class Melee extends Role {
 	role: string = 'Melee';
-	traits: BodyPartConstant[] = [ ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE ];
+	traits: BodyPartConstant[] = [ ATTACK, ATTACK, MOVE, MOVE ];
 	requestedCreeps: number = 2;
 	loop: Function = (creep: Creep) => {
 		new Role().loop(creep);

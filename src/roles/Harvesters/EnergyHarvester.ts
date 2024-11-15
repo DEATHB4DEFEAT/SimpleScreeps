@@ -24,9 +24,10 @@ export default class EnergyHarvester extends Role {
 		if (creep.memory.task == Tasks.SUPPLY_SPAWN && creep.store[RESOURCE_ENERGY] > 0) {
 			delete creep.memory.targets.source;
 
-			const code = creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY);
+			const code = creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY,
+				Math.min(creep.store.getUsedCapacity(RESOURCE_ENERGY), Game.spawns['Spawn1'].store.getFreeCapacity(RESOURCE_ENERGY)));
 			if (code == ERR_NOT_IN_RANGE)
-				creep.moveTo(Game.spawns['Spawn1'], { visualizePathStyle: { lineStyle: 'dashed', stroke: 'yellow', opacity: 0.2, } });
+				creep.moveTo(Game.spawns['Spawn1'], { visualizePathStyle: { lineStyle: 'dashed', stroke: 'yellow', opacity: 0.1, } });
 			if (code == ERR_FULL)
 				creep.memory.task = Tasks.DEPOSIT_ENERGY;
 		}
@@ -47,9 +48,10 @@ export default class EnergyHarvester extends Role {
 				creep.memory.targets.container = structure.id;
 			}
 
-			const code = creep.transfer(structure, RESOURCE_ENERGY);
+			const code = creep.transfer(structure, RESOURCE_ENERGY,
+				Math.min(creep.store.getUsedCapacity(RESOURCE_ENERGY), structure.store.getFreeCapacity(RESOURCE_ENERGY)));
 			if (code == ERR_NOT_IN_RANGE)
-				creep.moveTo(structure, { visualizePathStyle: { lineStyle: 'dotted', stroke: 'yellow', opacity: 0.2, } });
+				creep.moveTo(structure, { visualizePathStyle: { lineStyle: 'dotted', stroke: 'yellow', opacity: 0.1, } });
 			if (code == ERR_FULL) {
 				creep.memory.task = Tasks.SUPPLY_SPAWN;
 				creep.say(creep.memory.task);
@@ -65,7 +67,7 @@ export default class EnergyHarvester extends Role {
 
 			const code = creep.harvest(sourceBlock)
 			if (code == ERR_NOT_IN_RANGE)
-				creep.moveTo(sourceBlock, { visualizePathStyle: { lineStyle: undefined, stroke: 'yellow', opacity: 0.2, } });
+				creep.moveTo(sourceBlock, { visualizePathStyle: { lineStyle: 'solid', stroke: 'yellow', opacity: 0.1, } });
 			if (code == ERR_INVALID_TARGET)
 				delete creep.memory.targets.source;
 		}

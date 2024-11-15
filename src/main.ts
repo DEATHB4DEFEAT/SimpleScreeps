@@ -35,9 +35,9 @@ declare global {
 const roles = [
 	// { 'key': 'EnergyDistributor', 'value': new EnergyDistributor() },
 	{ 'key': 'EnergyHarvester', 'value': new EnergyHarvester() },
-	// { 'key': 'Builder', 'value': new Builder() },
+	{ 'key': 'Builder', 'value': new Builder() },
 	// { 'key': 'Repair', 'value': new Repair() },
-	// { 'key': 'Melee', 'value': new Melee() },
+	{ 'key': 'Melee', 'value': new Melee() },
 ];
 
 let count = 0;

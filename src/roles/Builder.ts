@@ -39,7 +39,7 @@ export default class Builder extends Role {
 
 			const code = creep.build(site);
 			if (code == ERR_NOT_IN_RANGE)
-				creep.moveTo(site);
+				creep.moveTo(site, { visualizePathStyle: { lineStyle: 'solid', stroke: 'brown', opacity: 0.25, } });
 			if (code == ERR_INVALID_TARGET) {
 				delete creep.memory.targets.build;
 				delete creep.memory.task;
@@ -54,7 +54,7 @@ export default class Builder extends Role {
 			delete creep.memory.targets.source;
 
 			if (creep.upgradeController(creep.room.controller!) == ERR_NOT_IN_RANGE)
-				creep.moveTo(creep.room.controller!);
+				creep.moveTo(creep.room.controller!, { visualizePathStyle: { lineStyle: 'dashed', stroke: 'brown', opacity: 0.25, } });
 
 			if (creep.store[RESOURCE_ENERGY] == 0)
 				delete creep.memory.task;
@@ -72,7 +72,7 @@ export default class Builder extends Role {
 				if (code == ERR_INVALID_TARGET)
 					delete creep.memory.targets.source;
 				if (code == ERR_NOT_IN_RANGE)
-					creep.moveTo(sourceBlock);
+					creep.moveTo(sourceBlock, { visualizePathStyle: { lineStyle: 'dotted', stroke: 'yellow', opacity: 0.1, } });
 			}
 
 		// Invalid
