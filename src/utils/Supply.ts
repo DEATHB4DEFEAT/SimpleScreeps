@@ -1,10 +1,8 @@
 export function resupplyFromContainer(creep: Creep, resource: ResourceConstant): boolean {
 	const source = creep.memory.targets.container ?? creep.room.find(FIND_STRUCTURES)
 		.find(s => s.structureType == STRUCTURE_CONTAINER && s.store[resource] > 0)?.id as Id<StructureContainer>;
-	if (!source) {
-		creep.say('NO ENERGY');
+	if (!source)
 		return false;
-	}
 
 	const sourceBlock = Game.getObjectById(source) as StructureContainer;
 	if ((sourceBlock as Structure).structureType != STRUCTURE_CONTAINER

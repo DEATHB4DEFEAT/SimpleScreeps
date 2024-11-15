@@ -4,7 +4,7 @@ import Tasks from '../../utils/Tasks';
 
 export default class EnergyHarvester extends Role {
 	role: string = 'EnergyHarvester';
-	traits: BodyPartConstant[] = [ WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE ];
+	traits: BodyPartConstant[] = [ WORK, CARRY, MOVE, MOVE ];
 	requestedCreeps: number = 16;
 	loop: Function = (creep: Creep) => {
 		new Role().loop(creep);
@@ -26,7 +26,7 @@ export default class EnergyHarvester extends Role {
 
 			const code = creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY);
 			if (code == ERR_NOT_IN_RANGE)
-				creep.moveTo(Game.spawns['Spawn1']);
+				creep.moveTo(Game.spawns['Spawn1'], { visualizePathStyle: { lineStyle: 'dashed', stroke: 'yellow', opacity: 0.2, } });
 			if (code == ERR_FULL)
 				creep.memory.task = Tasks.DEPOSIT_ENERGY;
 		}
@@ -49,7 +49,7 @@ export default class EnergyHarvester extends Role {
 
 			const code = creep.transfer(structure, RESOURCE_ENERGY);
 			if (code == ERR_NOT_IN_RANGE)
-				creep.moveTo(structure);
+				creep.moveTo(structure, { visualizePathStyle: { lineStyle: 'dotted', stroke: 'yellow', opacity: 0.2, } });
 			if (code == ERR_FULL) {
 				creep.memory.task = Tasks.SUPPLY_SPAWN;
 				creep.say(creep.memory.task);
@@ -65,7 +65,7 @@ export default class EnergyHarvester extends Role {
 
 			const code = creep.harvest(sourceBlock)
 			if (code == ERR_NOT_IN_RANGE)
-				creep.moveTo(sourceBlock);
+				creep.moveTo(sourceBlock, { visualizePathStyle: { lineStyle: undefined, stroke: 'yellow', opacity: 0.2, } });
 			if (code == ERR_INVALID_TARGET)
 				delete creep.memory.targets.source;
 		}

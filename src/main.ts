@@ -1,5 +1,5 @@
 import { ErrorMapper } from "utils/ErrorMapper";
-import { filter, object } from 'lodash';
+import { filter } from 'lodash';
 import EnergyHarvester from './roles/Harvesters/EnergyHarvester';
 import Builder from './roles/Builder';
 import EnergyDistributor from './roles/Distributors/EnergyDistributor';
@@ -33,11 +33,11 @@ declare global {
 
 //TODO: Make this dynamic
 const roles = [
-	{ 'key': 'EnergyDistributor', 'value': new EnergyDistributor() },
+	// { 'key': 'EnergyDistributor', 'value': new EnergyDistributor() },
 	{ 'key': 'EnergyHarvester', 'value': new EnergyHarvester() },
-	{ 'key': 'Builder', 'value': new Builder() },
-	{ 'key': 'Repair', 'value': new Repair() },
-	{ 'key': 'Melee', 'value': new Melee() },
+	// { 'key': 'Builder', 'value': new Builder() },
+	// { 'key': 'Repair', 'value': new Repair() },
+	// { 'key': 'Melee', 'value': new Melee() },
 ];
 
 let count = 0;
