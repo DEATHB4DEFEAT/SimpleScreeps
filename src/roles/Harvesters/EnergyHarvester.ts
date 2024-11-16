@@ -42,7 +42,7 @@ export default class EnergyHarvester extends Role {
 				structure = creep.room.find(FIND_STRUCTURES)
 					.find(s => s.structureType == STRUCTURE_CONTAINER && s.store.getFreeCapacity() > 0) as StructureContainer;
 				if (!structure) {
-					creep.memory.task = Tasks.SUPPLY_SPAWN;
+					creep.memory.task = Tasks.UPGRADE_ROOM;
 					return;
 				}
 				creep.memory.targets.container = structure.id;
@@ -53,11 +53,21 @@ export default class EnergyHarvester extends Role {
 			if (code == ERR_NOT_IN_RANGE)
 				creep.moveTo(structure, { visualizePathStyle: { lineStyle: 'dotted', stroke: 'yellow', opacity: 0.1, } });
 			if (code == ERR_FULL) {
-				creep.memory.task = Tasks.SUPPLY_SPAWN;
+				creep.memory.task = Tasks.UPGRADE_ROOM;
 				creep.say(creep.memory.task);
 			}
 			if (code == ERR_INVALID_TARGET)
 				delete creep.memory.targets.container;
+		}
+
+		else if (creep.memory.task == Tasks.UPGRADE_ROOM) {
+			delete creep.memory.targets.source;
+
+			if (creep.upgradeController(creep.room.controller!) == ERR_NOT_IN_RANGE)
+				creep.moveTo(creep.room.controller!, { visualizePathStyle: { lineStyle: 'dotted', stroke: 'yellow', opacity: 0.1, } });
+
+			if (creep.store[RESOURCE_ENERGY] == 0)
+				delete creep.memory.task;
 		}
 
 		else if (creep.memory.task == Tasks.HARVEST && creep.store.getFreeCapacity() > 0) {
