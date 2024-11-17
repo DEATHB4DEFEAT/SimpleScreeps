@@ -25,7 +25,7 @@ export default class Repair extends Role {
 				creep.memory.task = Tasks.SUPPLY_SPAWN;
 
 			if (ol != creep.memory.task)
-				creep.say(creep.memory.task);
+				creep.say(creep.memory.task, true);
 		}
 
 

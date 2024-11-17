@@ -24,7 +24,7 @@ export default class Builder extends Role {
 			creep.memory.task ??= Tasks.UPGRADE_ROOM;
 
 			if (ol != creep.memory.task)
-				creep.say(creep.memory.task);
+				creep.say(creep.memory.task, true);
 		}
 
 

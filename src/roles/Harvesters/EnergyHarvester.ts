@@ -17,7 +17,7 @@ export default class EnergyHarvester extends Role {
 					creep.memory.task = Tasks.SUPPLY_SPAWN;
 
 			if (creep.memory.task)
-				creep.say(creep.memory.task);
+				creep.say(creep.memory.task, true);
 		}
 
 
@@ -54,7 +54,7 @@ export default class EnergyHarvester extends Role {
 				creep.moveTo(structure, { visualizePathStyle: { lineStyle: 'dotted', stroke: 'yellow', opacity: 0.1, } });
 			if (code == ERR_FULL) {
 				creep.memory.task = Tasks.UPGRADE_ROOM;
-				creep.say(creep.memory.task);
+				creep.say(creep.memory.task, true);
 			}
 			if (code == ERR_INVALID_TARGET)
 				delete creep.memory.targets.container;

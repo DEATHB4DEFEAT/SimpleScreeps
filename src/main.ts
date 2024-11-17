@@ -16,7 +16,6 @@ declare global {
 
 	interface CreepMemory {
 		role: string;
-		room: string;
 		targets: {
 			build?: Id<ConstructionSite>;
 			container?: Id<StructureContainer>;
@@ -70,23 +69,19 @@ export const loop = ErrorMapper.wrapLoop(() => {
 	for (const r in roles) {
 		// Get all creeps of this kind
 		const role = roles[r].value;
-		let cur = filter(Game.creeps, { memory: { role: roles[r].key } }).length;
+		const cur = filter(Game.creeps, { memory: { role: roles[r].key } }).length;
 
-		while (cur < role.requestedCreeps) {
+		if (cur < role.requestedCreeps) {
 			const newId = `${role.role}${count + 1}`;
 
-			let code = Game.spawns['Spawn1'].spawnCreep(role.traits, newId);
+			let code = Game.spawns['Spawn1'].spawnCreep(role.traits, newId, { memory: { role: role.role, targets: { } } });
 			count++;
 			if (code < 0) {
 				console.log(`Failed to spawn creep ${newId} for role ${role.role} at spawn ${'Spawn1'} with code ${code}`);
 				return;
 			}
 
-			// Make sure the creep knows its' place
-			const newCreep = Game.creeps[newId];
-			newCreep.memory.role = role.role;
-			newCreep.memory.targets = {};
-			cur++;
+			return;
 		}
 	}
 });

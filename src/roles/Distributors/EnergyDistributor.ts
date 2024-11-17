@@ -21,7 +21,7 @@ export default class EnergyDistributor extends Role {
 				creep.memory.task = Tasks.SUPPLY_SPAWN_EXTENSIONS;
 
 			if (creep.memory.task)
-				creep.say(creep.memory.task);
+				creep.say(creep.memory.task, true);
 		}
 
 

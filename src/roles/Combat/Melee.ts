@@ -18,15 +18,15 @@ export default class Melee extends Role {
 				if (Game.flags['AWAITERMINATE'])
 					creep.moveTo(Game.flags['AWAITERMINATE'], { visualizePathStyle: { lineStyle: 'dotted', stroke: 'orange', }, })
 				else
-					creep.say('TERMINATED')
+					creep.say('TERMINATED', true)
 				return;
 			}
 
 			const code = creep.attack(enemy);
 			if (code == ERR_NOT_IN_RANGE)
 				creep.moveTo(enemy, { visualizePathStyle: { lineStyle: 'solid', stroke: 'red', }, });
-			if (code == ERR_INVALID_TARGET){ creep.say('INVALID TARGET');
-				delete creep.memory.targets.creep;}
+			if (code == ERR_INVALID_TARGET)
+				delete creep.memory.targets.creep;
 
 			// const controller = creep.room.controller!;
 			// const code = creep.attackController(controller);
